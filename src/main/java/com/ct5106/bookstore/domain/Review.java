@@ -4,9 +4,12 @@ import java.time.LocalDate;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 
 @Entity
 public class Review {
@@ -24,16 +27,29 @@ public class Review {
 	@Column(nullable = false)
 	private LocalDate reviewDate;
 	
+	@ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "book_isbn")
+    private Book book;
+	
 	public Review()
 	{
 		super();
 	}
 
-	public Review(float rating, String comment, LocalDate reviewDate) {
+	public Review(float rating, String comment, LocalDate reviewDate, Book book) {
 		super();
 		this.rating = rating;
 		this.comment = comment;
 		this.reviewDate = reviewDate;
+		this.book = book;
+	}
+	
+	public Book getBook(){
+		return book;
+	}
+	
+	public void setBook(Book book) {
+		this.book = book;
 	}
 
 	public Long getReviewId() {
