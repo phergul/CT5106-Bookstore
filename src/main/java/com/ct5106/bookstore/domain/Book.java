@@ -16,12 +16,7 @@ import jakarta.persistence.OneToMany;
 
 @Entity
 public class Book {
-
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	private long id;
-	
-	@Column
 	private String ISBN;
 	
 	@Column(nullable=false, length=512)
