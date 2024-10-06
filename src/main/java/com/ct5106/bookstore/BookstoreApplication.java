@@ -2,11 +2,13 @@ package com.ct5106.bookstore;
 
 import java.time.LocalDate;
 
+import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import com.ct5106.bookstore.domain.Author;
 import com.ct5106.bookstore.domain.AuthorRepository;
@@ -14,16 +16,22 @@ import com.ct5106.bookstore.domain.Book;
 import com.ct5106.bookstore.domain.BookRepository;
 import com.ct5106.bookstore.domain.Publisher;
 import com.ct5106.bookstore.domain.PublisherRepository;
-//import com.ct5106.bookstore.domain.Review;
+import com.ct5106.bookstore.domain.Review;
 import com.ct5106.bookstore.domain.ReviewRepository;
 
 @SpringBootApplication
 public class BookstoreApplication implements CommandLineRunner {
 
+	@Autowired
 	private final BookRepository brepository;
+	@Autowired
 	private final AuthorRepository arepository;
+	@Autowired
 	private final PublisherRepository prepository;
-	//private final ReviewRepository rrepository;
+	@Autowired
+	private final ReviewRepository rrepository;
+	@Autowired
+    private SessionFactory sessionFactory;
 
 	private static final Logger logger = LoggerFactory.getLogger(BookstoreApplication.class);
 
@@ -34,7 +42,7 @@ public class BookstoreApplication implements CommandLineRunner {
 		this.brepository = brepository;
 		this.arepository = arepository;
 		this.prepository = prepository;
-		//this.rrepository = rrepository;
+		this.rrepository = rrepository;
 	}
 
 	public static void main(String[] args) {
@@ -45,6 +53,9 @@ public class BookstoreApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
+		sessionFactory.getCache().evictAllRegions();
+		
+	
 		Author author1 = new Author("Joanne", "Rowling", LocalDate.of(1965, 7, 31));
 		Author author2 = new Author("Roald", "Dahl", LocalDate.of(1916, 9, 13));
 		arepository.save(author1);
@@ -55,15 +66,15 @@ public class BookstoreApplication implements CommandLineRunner {
 		prepository.save(pub1);
 		prepository.save(pub2);
 
-		/*
-		 * Review r1 = new Review(4.5f, "Great Book", LocalDate.of(2024, 2, 20));
-		 * rrepository.save(r1);
-		 */
-
 		brepository.save(new Book("978-0-7475-3269-9", "Harry Potter and the Philosopher's Stone", author1, pub1, 7.99f,
 				100, LocalDate.of(1997, 6, 26)));
 		brepository.save(new Book("978-0-1424-0108-8", "Charlie and the Chocolate Factory", author2, pub2, 6.99f, 200,
 				LocalDate.of(1964, 1, 17)));
+		
+		Book book1 = brepository.findById("978-0-7475-3269-9").orElseThrow(() -> new RuntimeException("Book not found"));
+		
+		Review r1 = new Review(4.5f, "Great Book", LocalDate.of(2024, 2, 20), book1);
+		rrepository.save(r1);
 
 		for (Book book : brepository.findAll())
 		{

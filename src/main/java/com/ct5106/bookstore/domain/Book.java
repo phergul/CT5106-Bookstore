@@ -1,7 +1,9 @@
 package com.ct5106.bookstore.domain;
 
 import java.time.LocalDate;
+import java.util.List;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -10,6 +12,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 
 @Entity
 public class Book {
@@ -45,6 +48,9 @@ public class Book {
 	
 	@Column(nullable = false)
 	private LocalDate releaseDate;
+	
+	@OneToMany(mappedBy = "book", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Review> reviews;
 
 	public Book()
 	{
@@ -127,6 +133,12 @@ public class Book {
 		this.releaseDate = releaseDate;
 	}
 	
-	
+	public List<Review> getReviews() {
+        return reviews;
+    }
+
+    public void setReviews(List<Review> reviews) {
+        this.reviews = reviews;
+    }
 	
 }
