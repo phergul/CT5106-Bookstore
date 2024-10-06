@@ -11,10 +11,8 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 @RepositoryRestResource
 public interface ReviewRepository  extends CrudRepository<Review, Long>
 {
-	 // Query method using keywords and property names
-    List<Review> findDistinctByRatingAndReviewDate(float rating, LocalDate reviewDate);
+    List<Review> findDistinctByRatingAndReviewDate(@Param("rating")float rating, @Param("date")LocalDate reviewDate);
 
-    // Query method using JPQL and @Query annotation
     @Query("SELECT r FROM Review r WHERE r.rating > :rating")
     List<Review> findReviewsWithRatingGreaterThan(@Param("rating") float rating);
 }
