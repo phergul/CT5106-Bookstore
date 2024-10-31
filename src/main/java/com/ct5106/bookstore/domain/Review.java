@@ -11,6 +11,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 
+
 @Entity
 public class Review {
 
@@ -20,17 +21,17 @@ public class Review {
 	
 	@Column(nullable = false)
 	private float rating;
-	
+
 	@Column
 	private String comment;
 	
 	@Column(nullable = false)
 	private LocalDate reviewDate;
-	
+
 	@ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "book_isbn")
-    private Book book;
-	
+	private Book book;
+
 	public Review()
 	{
 		super();

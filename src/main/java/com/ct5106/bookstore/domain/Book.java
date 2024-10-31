@@ -122,8 +122,8 @@ public class Book {
 		return releaseDate;
 	}
 
-	public void setReleaseDate(LocalDate releaseDate) {
-		this.releaseDate = releaseDate;
+	public void setReleaseDate(String releaseDateString) {
+		this.releaseDate = LocalDate.parse(releaseDateString);
 	}
 	
 	public List<Review> getReviews() {
